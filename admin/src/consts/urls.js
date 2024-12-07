@@ -1,0 +1,1 @@
+export const maninUrl = 'http://localhost:4000';
