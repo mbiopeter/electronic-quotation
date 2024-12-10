@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const QuotationDetails = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
 
     const [expand, setExpand] = useState(false);
 
@@ -66,7 +65,7 @@ const QuotationDetails = () => {
     };
 
     const handleDownload = () => {
-        navigate(`/recept/${id}`);
+        window.open(`/recept/${id}`, '_blank');
     };
 
     return (
