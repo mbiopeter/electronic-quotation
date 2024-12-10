@@ -9,7 +9,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 const UpBar = () => {
     const [expand, setExpand] = useState(false);
-    const location = useLocation();
+    const location = useLocation(); 
 
     useEffect(() => {
         setExpand(false);
@@ -28,14 +28,21 @@ const UpBar = () => {
                     </span>
                 </div>
                 <div className="relative flex w-full lg:w-auto justify-end">
-                    <div className="flex items-center gap-3">
-                        <Person2OutlinedIcon fontSize="large" />
-                        <span className="text-2sm lg:text-lg font-medium text-gray-600 capitalize">
+                    <div className="flex items-center gap-1 md:gap-3">
+                            <Person2OutlinedIcon
+                                sx={{
+                                    fontSize: {
+                                    xs: 20,
+                                    sm: 24, 
+                                    md: 32,
+                                    },
+                                }}/>
+                            <span className="text-sm lg:text-lg font-medium text-gray-600 capitalize">
                             John Kimani
                         </span>
                         <button
                             onClick={toggleExpand}
-                            className="flex items-center justify-center bg-yellow-500 text-white p-2 rounded-full focus:outline-none"
+                            className="flex items-center justify-center bg-yellow-500 text-white p-1 md:p-2 rounded-full focus:outline-none"
                             aria-expanded={expand}
                             aria-label="Toggle navigation"
                         >
