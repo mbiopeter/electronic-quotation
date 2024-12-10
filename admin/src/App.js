@@ -9,6 +9,7 @@ import Login from './views/pages/Login';
 import QuotationDetails from './views/pages/quotationDetails';
 import EditItem from './views/pages/editItem';
 import QuotationRecept from './views/pages/quotationRecept';
+import Settings from './views/pages/settings';
 
 
 function AppContent() {
@@ -26,6 +27,7 @@ function AppContent() {
         <Route path="/quotations/:id" element={<QuotationDetails />} />
         <Route path="/editItem/:id" element={<EditItem />} />
         <Route path="/recept/:id" element={<QuotationRecept />} />
+        <Route path="/setting" element={<Settings />} />
       </Routes>
     </>
   );

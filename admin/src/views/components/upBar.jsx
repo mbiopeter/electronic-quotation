@@ -1,89 +1,73 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { logo } from '../../model/images';
-import { useLocation, Link } from 'react-router-dom';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ClassIcon from '@mui/icons-material/Class';
-import PeopleIcon from '@mui/icons-material/People';
-import ReportIcon from '@mui/icons-material/Report';
 import SettingsIcon from '@mui/icons-material/Settings';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import PaymentIcon from '@mui/icons-material/Payment';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Link, useLocation } from 'react-router-dom';
 
 const UpBar = () => {
     const [expand, setExpand] = useState(false);
-    const [toggleSidebar, setToggleSidebar] = useState(false);
     const location = useLocation();
-    
-    const path = location.pathname;
+
+    useEffect(() => {
+        setExpand(false);
+    }, [location]);
+
     const toggleExpand = () => setExpand((prev) => !prev);
-    useEffect(() =>{
-        setToggleSidebar(false);
-        document.body.style.overflow = 'auto';
-    },[path]);
 
-
-    const navLinksData = [
-        { id: 1, icon: <DashboardIcon />, name: 'Dashboard', route: '/' },
-        { id: 2, icon: <ClassIcon />, name: 'Courses', route: '/courses' },
-        { id: 3, icon: <PeopleIcon />, name: 'Users', route: '/users' },
-        { id: 4, icon: <ReportIcon />, name: 'Reports', route: '/reports' },
-        { id: 5, icon: <AttachMoneyIcon />, name: 'Sales', route: '/sales' },
-        { id: 6, icon: <PaymentIcon />, name: 'Payments', route: '/payments' },
-        { id: 7, icon: <SubscriptionsIcon />, name: 'Subscriptions', route: '/subscriptions' },
-        { id: 8, icon: <SettingsIcon />, name: 'Settings', route: '/settings' },
-    ];
-
-    const NavLinks = ({ icon, name, route }) => (
-        <Link to={route}>
-            <div className={`flex w-[150px] h-[20px] cursor-pointer gap-2 items-center justify-center px-3 py-5 shadow-xl ${path === route ? 'bg-blue-100 border-l-4 rounded border-blue-400' : ''}`}>
-                {icon}
-                <span className="text-[#333333] text-sm font-medium">{name}</span>
-            </div>
-        </Link>
-    );
-
-    const MobileNav = ({icon, name, route}) => {
-        return(
-            <Link to={route}>
-                <div className={`px-5 py-2 flex flex-row gap-3 items-center ${path === route ? 'bg-blue-100 border-l-4 rounded border-blue-400' : ''}`}>
-                    {icon}
-                    <span className='text-[#333333] text-sm font-medium'>{name}</span>
-                </div>
-            </Link>
-        )
-    }
-
-    const handleExpand = () => {
-        document.body.style.overflow = 'hidden';
-        setToggleSidebar(true);
-    };
-
-    const handleClose = () => {
-        document.body.style.overflow = 'auto';
-        setToggleSidebar(false);
-    };
     return (
-        <div className="sticky top-0 left-0 z-10 w-full flex flex-col bg-white shadow-sm">
-            <div className="w-full py-4 px-10 flex justify-between items-center border-b border-gray-200">
+        <div className="sticky top-0 left-0 z-10 w-full bg-white shadow-sm">
+            {/* Top Bar */}
+            <div className="relative w-full py-4 px-10 flex justify-between items-center border-b border-gray-200">
                 <div className="hidden lg:flex items-center gap-4">
                     <img src={logo} alt="Logo" className="w-10 h-10" />
-                    <span className="text-xl font-bold text-gray-600">MBEREREKIM INSTALLATION CO.LTD</span>
+                    <span className="text-xl font-bold text-gray-600">
+                        MBEREREKIM INSTALLATION CO.LTD
+                    </span>
                 </div>
-                <div className="flex items-center gap-3">
-                    <Person2OutlinedIcon fontSize="large" />
-                    <span className="text-2sm lg:text-lg font-medium text-gray-600 capitalize "> John Kimani</span>
-                    <button onClick={toggleExpand} className="hidden lg:flex items-center justify-center bg-yellow-500 text-white p-2 rounded-full focus:outline-none" aria-expanded={expand} aria-label="Toggle navigation">
-                        {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </button>
-                </div>
-                <div className="lg:hidden cursor-pointer">
-                    <MenuIcon onClick={handleExpand}/>
+                <div className="relative flex w-full lg:w-auto justify-end">
+                    <div className="flex items-center gap-3">
+                        <Person2OutlinedIcon fontSize="large" />
+                        <span className="text-2sm lg:text-lg font-medium text-gray-600 capitalize">
+                            John Kimani
+                        </span>
+                        <button
+                            onClick={toggleExpand}
+                            className="flex items-center justify-center bg-yellow-500 text-white p-2 rounded-full focus:outline-none"
+                            aria-expanded={expand}
+                            aria-label="Toggle navigation"
+                        >
+                            {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        </button>
+                    </div>
+
+                    {/* Dropdown Menu */}
+                    <div
+                        className={`absolute top-full right-0 mt-2 bg-white shadow-lg rounded-lg w-48 p-4 z-20 transition-[opacity,transform] duration-300 ease-in-out ${
+                            expand
+                                ? 'opacity-100 translate-y-0 visible'
+                                : 'opacity-0 -translate-y-4 invisible'
+                        }`}
+                    >
+                        <div className="flex flex-col gap-3">
+                            <Link to="/setting">
+                                <div className="flex cursor-pointer items-center gap-3">
+                                    <SettingsIcon className="text-gray-600" />
+                                    <span className="text-sm font-medium text-gray-600 capitalize">
+                                        Settings
+                                    </span>
+                                </div>
+                            </Link>
+                            <div className="flex cursor-pointer items-center gap-3">
+                                <LogoutIcon className="text-gray-600" />
+                                <span className="text-sm font-medium text-gray-600 capitalize">
+                                    Log Out
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
