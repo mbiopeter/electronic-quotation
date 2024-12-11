@@ -6,9 +6,6 @@ const addService = async (
     description,
 ) => {
     try {
-        if (!name || !phone || !description) {
-            throw new Error('All the fields are required!');
-        }
         const newQuotation = await Quotations.create({
             name,
             phone,
@@ -22,12 +19,24 @@ const addService = async (
 
 const allService = async () => {
     try {
-        const allQuotations = await Quotations.findAll();
-        return allQuotations;
+        const allQuotations = await Quotations.findAll({
+            attributes: ['id', 'name', 'phone', 'description'],
+        });
+
+        const formattedQuotations = allQuotations.map(item => ({
+            id: item.id,
+            QuoteNo: `Quote-${item.id}`,
+            desc: item.description,
+            toName: item.name,
+            toPhone: item.phone,
+        }));
+
+        return formattedQuotations;
     } catch (error) {
+        console.error("Error fetching quotations:", error);
         throw error;
     }
-}
+};
 
 const oneService = async (
     name,
@@ -35,9 +44,6 @@ const oneService = async (
     description
 ) => {
     try {
-        if (!name || !phone || !description) {
-            throw new Error('All the fields are required!');
-        }
         const response = await Quotations.findOne({
             where: {
                 name,

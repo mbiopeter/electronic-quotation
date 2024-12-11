@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 router.post('/create', addController);
 router.get('/all', allController);
-router.get('/remove', deleteController);
+router.delete('/remove', deleteController);
 
 
 module.exports = router;

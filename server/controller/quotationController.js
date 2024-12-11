@@ -9,17 +9,21 @@ const { remove } = require('../utils/deleteService');
 const addController = async (req, res) => {
     try {
         const { name, phone, description } = req.body;
-        const checkExistence = await oneService(name, phone, description);
-        if (checkExistence) {
-            console.log(checkExistence)
-            res.status(400).json({ message: 'Quotation already exist!' });
-        }
-        else {
-            await addService(name, phone, description);
-            res.status(200).json({ message: 'Quotation added sucessfully!' });
+        if (!name || !phone || !description) {
+            res.status(400).json({ message: 'All the fields are required!' });
+        } else {
+            const checkExistence = await oneService(name, phone, description);
+            if (checkExistence) {
+                console.log(checkExistence)
+                res.status(400).json({ message: 'Quotation already exist!' });
+            }
+            else {
+                await addService(name, phone, description);
+                res.status(200).json({ message: 'Quotation added sucessfully!' });
+            }
         }
     } catch (error) {
-        res.status(400).json(error.message);
+        res.status(400).json(error);
     }
 }
 
