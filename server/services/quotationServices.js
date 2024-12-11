@@ -38,27 +38,59 @@ const allService = async () => {
     }
 };
 
-const oneService = async (
-    name,
-    phone,
-    description
-) => {
+const checkService = async (name, phone, description) => {
     try {
         const response = await Quotations.findOne({
-            where: {
-                name,
-                phone,
-                description,
-            },
+            where: { name, phone, description },
+            attributes: ['id', 'name', 'phone', 'description'],
         });
-        return response;
+
+        if (!response) {
+            return null;
+        }
+
+        const formattedQuotation = {
+            id: response.id,
+            QuoteNo: `Quote-${response.id}`,
+            desc: response.description,
+            toName: response.name,
+            toPhone: response.phone,
+        };
+
+        return formattedQuotation;
+    } catch (error) {
+        console.error("Error fetching a single quotation:", error);
+        throw error;
+    }
+};
+
+const oneService = async (id) => {
+    try {
+        const quotation = await Quotations.findOne({
+            where: { id },
+            attributes: ['id', 'name', 'phone'],
+        });
+
+        if (!quotation) {
+            return null;
+        }
+
+        const formattedQuotation = {
+            QuoteNo: `Quote-${quotation.id}`,
+            toName: quotation.name,
+            toPhone: quotation.phone,
+        };
+
+        return formattedQuotation;
     } catch (error) {
         throw error;
     }
-}
+};
+
 
 module.exports = {
     addService,
     allService,
+    checkService,
     oneService
 }

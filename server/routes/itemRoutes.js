@@ -2,9 +2,9 @@ const express = require('express');
 const {
     addController,
     allController,
-    deleteController,
-    oneController
-} = require('../controller/quotationController');
+    oneController,
+    deleteController
+} = require('../controller/ItemsController');
 
 const router = express.Router();
 router.post('/create', addController);

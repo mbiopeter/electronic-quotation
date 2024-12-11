@@ -8,7 +8,7 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      QuoteId: {
+      quoteId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

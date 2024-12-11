@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const Quotations = sequelize.define('Quotations', {
-    QuoteId: {
+const Items = sequelize.define('Items', {
+    quoteId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         unique: false,
@@ -37,4 +37,4 @@ const Quotations = sequelize.define('Quotations', {
     timestamps: true,
 });
 
-module.exports = Quotations;
+module.exports = Items;

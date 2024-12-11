@@ -2,6 +2,7 @@ const Quotations = require('../models/quotations');
 const {
     addService,
     allService,
+    checkService,
     oneService
 } = require('../services/quotationServices');
 const { remove } = require('../utils/deleteService');
@@ -12,7 +13,7 @@ const addController = async (req, res) => {
         if (!name || !phone || !description) {
             res.status(400).json({ message: 'All the fields are required!' });
         } else {
-            const checkExistence = await oneService(name, phone, description);
+            const checkExistence = await checkService(name, phone, description);
             if (checkExistence) {
                 console.log(checkExistence)
                 res.status(400).json({ message: 'Quotation already exist!' });
@@ -32,10 +33,20 @@ const allController = async (req, res) => {
         const responseData = await allService();
         res.status(200).json(responseData);
     } catch (error) {
-        res.status(400).json(error.message);
+        res.status(400).json(error);
     }
 }
 
+const oneController = async (req, res) => {
+    try {
+        const id = req.query.id;
+        const responseData = await oneService(id);
+        res.status(200).json(responseData);
+
+    } catch (error) {
+        res.status(400).json(error);
+    }
+}
 
 const deleteController = async (req, res) => {
     try {
@@ -53,5 +64,6 @@ const deleteController = async (req, res) => {
 module.exports = {
     addController,
     allController,
-    deleteController
+    deleteController,
+    oneController
 }
