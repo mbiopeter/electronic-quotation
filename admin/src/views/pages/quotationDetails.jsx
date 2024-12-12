@@ -11,7 +11,10 @@ const QuotationDetails = () => {
 
     const [expand, setExpand] = useState(false);
     const [quotation, setQuotation] = useState({});
+    const [reload, setReload] = useState(true);
+    const [apiData, setApiData] = useState([]);
     const [quotItems,setQuotItems] = useState({
+        quoteId:id,
         unit:"",
         quantity:0,
         rate:0,
@@ -26,10 +29,6 @@ const QuotationDetails = () => {
             [key]:e.target.value
         }))
     }
-
-    const handleDelete = (id) => {
-        console.log(id);
-    };
 
     const TableBtn = ({ id }) => (
         <button
@@ -47,19 +46,6 @@ const QuotationDetails = () => {
         </Link>
     );
 
-    const apiData = [
-        {
-            id:1,
-            itemNo: 'item-1',
-            desc: 'Electrical appliances',
-            quantity: 2,
-            unit: 'Meters',
-            rate: 1200,
-            total: 2400,
-            cts: 0,
-        },
-    ];
-
     const rows = apiData.map((row) => ({
         ...row,
         detailaBtn: <EditBtn id={row.id} />,
@@ -67,7 +53,7 @@ const QuotationDetails = () => {
     }));
 
     const columns = [
-        { id: "itemNo", label: "Item No", align: "left" },
+        { id: "ItemNo", label: "Item No", align: "left" },
         { id: "desc", label: "Description", align: "left" },
         { id: "quantity", label: "Quantity", align: "left" },
         { id: "unit", label: "Unit", align: "left" },
@@ -96,18 +82,51 @@ const QuotationDetails = () => {
     }
 
     const handleSubmit = async () => {
-        console.log(quotItems);
+        try{
+            const response = await axios.post(`${url}/item/create`,quotItems );
+            setReload(!reload);
+            toast.success(response.data.message);
+        }catch(error){
+            toast.error(error.response.data.message);
+        }
     }
     useEffect(() => {
         fetchQuotationDetails();
-    },[])
+    },[]);
+
+    const fetchItemsDetails = async () => {
+        try{
+            const responseData = await axios.get(`${url}/item/all`, {params:{quoteId: id}});
+            setApiData(responseData.data);
+        }catch(error){
+            return error;
+        }
+    }
+    const handleDelete = async (id) => {
+        try{
+            const response = await axios.delete(`${url}/item/remove`,{params: {id}})
+            setReload(!reload);
+            toast.success(response.data.message)
+        }catch(error){
+            toast.error(error.response.data.message);
+        }
+    }
+    useEffect(() => {
+        fetchItemsDetails();
+    },[reload]);
+
+    let grandTotal = 0;
+
+    apiData.map((item) => {
+        grandTotal += item.total
+    })
     return (
         <>
             <ToastContainer />
             <div className="flex w-[100%] justify-center">
                 <div className="w-[90%] md:w-[80%] flex flex-col gap-5">
                     <SubHeading
-                        name={`${quotation.QuoteNo}; To: ${quotation.toName}; Grand Total: Ksh 76000`}
+                        name={`${quotation.QuoteNo}; To: ${quotation.toName}; Grand Total: Ksh ${grandTotal}`}
                         handleOnClick={handleOnClick}
                         handleDownload={handleDownload}
                         download={true}/>
@@ -121,7 +140,6 @@ const QuotationDetails = () => {
                                 placeholder="Description"
                                 className="p-2 pl-4 bg-[#f1f0f0] rounded focus:outline-none focus:border-[#4956e2] focus:ring-2 focus:ring-[#4956e2]"></textarea>
                             <input
-
                                 onChange={(e) => handleinputOnChange(e, 'quantity')}
                                 type="number"
                                 placeholder="Quantity"
@@ -147,10 +165,10 @@ const QuotationDetails = () => {
                                 className="bg-blue-500 w-full p-3 pl-4 text-white font-[600]">SUBMIT</button>
                         </div>
                     </div>
-                    <EnhancedTable 
+                    {apiData.length > 0 && <EnhancedTable 
                         rows={rows} 
                         columns={columns} 
-                        title={"Quotation Items"} />
+                        title={"Quotation Items"} />}
                 </div>
             </div>
         </>

@@ -3,7 +3,8 @@ const {
     addService,
     allService,
     checkService,
-    oneService
+    oneService,
+    editService
 } = require('../services/itemService');
 const { remove } = require('../utils/deleteService');
 
@@ -24,7 +25,7 @@ const addController = async (req, res) => {
             return res.status(400).json({ message: 'Item quotation ID is required!' });
         }
 
-        const isExisting = await checkService(quoteId, description, quantity, unit, rate, cts);
+        const isExisting = await checkService(parseInt(quoteId, 10), description, parseInt(quantity, 10), unit, parseInt(rate, 10), cts);
         if (isExisting) {
             return res.status(400).json({ message: 'Item already exists!' });
         }
@@ -60,6 +61,28 @@ const oneController = async (req, res) => {
     }
 }
 
+const editController = async (req, res) => {
+    try {
+        const { itemId, description, quantity, unit, rate, cts } = req.body;
+
+        if (!description && !quantity && !unit && !rate && !cts) {
+            return res.status(400).json({ message: 'Please provide a field to update!' });
+        }
+        else {
+            const response = await editService(itemId, { description, quantity, unit, rate, cts });
+
+            if (!response) {
+                return res.status(400).json({ message: 'Item failed to update!' });
+            }
+
+            return res.status(200).json({ message: 'Item updated successfully!' });
+        }
+    } catch (error) {
+        console.error('Error updating item:', error);
+        return res.status(500).json({ message: 'Internal server error', error });
+    }
+};
+
 const deleteController = async (req, res) => {
     try {
         const id = req.query.id;
@@ -77,5 +100,6 @@ module.exports = {
     addController,
     allController,
     oneController,
-    deleteController
+    deleteController,
+    editController
 }

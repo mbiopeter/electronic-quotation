@@ -22,4 +22,6 @@ const Quotations = sequelize.define('Quotations', {
     timestamps: true,
 });
 
+
+
 module.exports = Quotations;

@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Quotations = require('./quotations');
 
 const Items = sequelize.define('Items', {
     quoteId: {
@@ -36,5 +37,6 @@ const Items = sequelize.define('Items', {
 }, {
     timestamps: true,
 });
+
 
 module.exports = Items;

@@ -1,4 +1,5 @@
 const Items = require("../models/items");
+const Quotations = require("../models/quotations");
 
 const addService = async (
     quoteId,
@@ -79,22 +80,32 @@ const checkService = async (
     }
 }
 
-const oneService = async (quoteId) => {
+const oneService = async (itemId) => {
     try {
         const oneItems = await Items.findOne({
             attributes: ['id', 'quoteId', 'description', 'quantity', 'unit', 'rate', 'cts'],
-            where: { quoteId }
+            where: { id: itemId }
         });
+
+        const quoteId = oneItems.quoteId;
+
+        const quotationDet = await Quotations.findOne({
+            attributes: ['name', 'phone'],
+            where: { id: quoteId }
+        })
 
         const formattedItems = {
             id: oneItems.id,
-            oneItemsNo: `item-${oneItems.id}`,
+            itemNo: `item-${oneItems.id}`,
+            quoteNo: `quote-${oneItems.quoteId}`,
             desc: oneItems.description,
             quantity: oneItems.quantity,
             unit: oneItems.unit,
             rate: oneItems.rate,
             total: oneItems.quantity * oneItems.rate,
-            cts: oneItems.cts
+            cts: oneItems.cts,
+            name: quotationDet.name,
+            phone: quotationDet.phone
         };
 
         return formattedItems;
@@ -103,9 +114,34 @@ const oneService = async (quoteId) => {
     }
 }
 
+const editService = async (itemId, fieldsToUpdate) => {
+    try {
+
+        const updateFields = {};
+        for (const [key, value] of Object.entries(fieldsToUpdate)) {
+            if (value !== undefined) {
+                updateFields[key] = value;
+            }
+        }
+
+        if (Object.keys(updateFields).length === 0) {
+            throw new Error('No valid fields provided for update');
+        }
+
+        const response = await Items.update(updateFields, { where: { id: itemId } });
+
+        return response[0] > 0;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+
 module.exports = {
     addService,
     allService,
     checkService,
-    oneService
+    oneService,
+    editService
 }
