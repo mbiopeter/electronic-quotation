@@ -44,7 +44,7 @@ const allService = async (quoteId) => {
             unit: item.unit,
             rate: item.rate,
             total: item.quantity * item.rate,
-            cts: item.cts
+            cts: item.cts,
         }));
 
         return formattedItems;

@@ -1,30 +1,30 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const Profile = sequelize.define('Profile', {
+const Profiles = sequelize.define('Profiles', {
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: false,
     },
     address: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: false,
     },
     email: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: DataTypes.STRING,
+        allowNull: true,
         unique: false,
     },
     phone: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: false,
     },
     kra: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: false,
     },
     signature: {
@@ -37,4 +37,4 @@ const Profile = sequelize.define('Profile', {
     timestamps: true,
 });
 
-module.exports = Profile;
+module.exports = Profiles;

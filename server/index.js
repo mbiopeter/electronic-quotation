@@ -7,13 +7,13 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const quotationRoutes = require('./routes/quotationRoutes');
 const itemRoutes = require('./routes/itemRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
-
 
 
 app.use((req, res, next) => {
@@ -27,6 +27,7 @@ app.use('/auth', authRoutes);
 app.use('/users/', userRoutes);
 app.use('/quotation/', quotationRoutes);
 app.use('/item/', itemRoutes);
+app.use('/profile/', profileRoutes);
 
 
 sequelize.authenticate()

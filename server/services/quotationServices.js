@@ -63,22 +63,25 @@ const checkService = async (name, phone, description) => {
         throw error;
     }
 };
-
 const oneService = async (id) => {
     try {
         const quotation = await Quotations.findOne({
             where: { id },
-            attributes: ['id', 'name', 'phone'],
+            attributes: ['id', 'name', 'phone', 'createdAt'],
         });
 
         if (!quotation) {
             return null;
         }
 
+        const createdAt = new Date(quotation.createdAt);
+        const formattedDate = `${String(createdAt.getDate()).padStart(2, '0')}/${String(createdAt.getMonth() + 1).padStart(2, '0')}/${createdAt.getFullYear()}`;
+
         const formattedQuotation = {
             QuoteNo: `Quote-${quotation.id}`,
             toName: quotation.name,
             toPhone: quotation.phone,
+            date: formattedDate,
         };
 
         return formattedQuotation;
