@@ -19,7 +19,6 @@ const registerUser = async (firstName, secondName, email, password) => {
             secondName,
             email,
             password: hashedPassword,
-            admin,
         });
         const token = jwt.sign({ id: newUser.id, email: newUser.email, firstName: newUser.firstName, secondName: newUser.secondName }, 'secretkey', { expiresIn: '2h' });
         return { token, user: newUser };

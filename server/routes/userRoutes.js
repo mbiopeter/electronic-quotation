@@ -5,7 +5,7 @@ const {
 } = require('../controller/userController');
 
 const router = express.Router();
-router.post('/register', register);
+router.post('/create', register);
 router.get('/one', getOne);
 
 

@@ -1,11 +1,7 @@
 const {
     registerUser,
-    allUsers,
     oneUser,
 } = require('../services/userService');
-const User = require('../models/user');
-const { remove } = require('../utils/deleteService');
-
 
 const register = async (req, res) => {
     const { firstName, secondName, email, password } = req.body;

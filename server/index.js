@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 app.use('/', express.static('files/'));
 
 app.use('/auth', authRoutes);
-app.use('/users/', userRoutes);
+app.use('/user/', userRoutes);
 app.use('/quotation/', quotationRoutes);
 app.use('/item/', itemRoutes);
 app.use('/profile/', profileRoutes);
