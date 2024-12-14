@@ -8,6 +8,7 @@ const userRoutes = require('./routes/userRoutes');
 const quotationRoutes = require('./routes/quotationRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -28,6 +29,7 @@ app.use('/users/', userRoutes);
 app.use('/quotation/', quotationRoutes);
 app.use('/item/', itemRoutes);
 app.use('/profile/', profileRoutes);
+app.use('/dashboard/', dashboardRoutes);
 
 
 sequelize.authenticate()
