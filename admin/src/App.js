@@ -10,16 +10,67 @@ import QuotationDetails from './views/pages/quotationDetails';
 import EditItem from './views/pages/editItem';
 import QuotationRecept from './views/pages/quotationRecept';
 import Settings from './views/pages/settings';
-
+import { jwtDecode } from "jwt-decode";
 
 function AppContent() {
   const location = useLocation();
+  const [fullName, setFullName] = useState('');
+  const navigate = useNavigate();
 
   const showUpBar = !(location.pathname === '/login' || location.pathname.startsWith('/recept'));
 
+  const logInStatus = () => {
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
+    }
+  };
+
+  const handleTokenDecode = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setFullName(`${decodedToken.firstName} ${decodedToken.secondName}`);
+      } catch (error) {
+        console.error("Invalid token", error);
+        localStorage.removeItem("token");
+        navigate('/login');
+      }
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const handleTokenExpiery = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (decodedToken.exp < currentTime) {
+          localStorage.removeItem("token");
+          navigate('/login');
+        } else {
+          handleTokenDecode();
+          logInStatus();
+        }
+      } catch (error) {
+        console.error("Token decoding error", error);
+        localStorage.removeItem("token");
+        navigate('/login');
+      }
+    } else {
+      navigate('/login');
+    }
+  };
+
+  useEffect(() => {
+    handleTokenExpiery();
+  }, []);
+
   return (
     <>
-      {showUpBar && <UpBar />}
+      {showUpBar && <UpBar fullName={fullName} />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

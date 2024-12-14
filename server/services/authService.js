@@ -15,7 +15,7 @@ const login = async (email, password) => {
         if (!isMatch) {
             throw new Error('Invalid password!');
         }
-        const token = jwt.sign({ id: user.id, email: user.email, firstName: user.firstName, secondName: user.secondName }, 'secretkey', { expiresIn: '2h' });
+        const token = jwt.sign({ firstName: user.firstName, secondName: user.secondName }, 'secretkey', { expiresIn: '2h' });
         return { token };
     } catch (error) {
         throw new Error(error.message || 'An error occurred during login');

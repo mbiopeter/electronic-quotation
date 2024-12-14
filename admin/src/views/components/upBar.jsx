@@ -5,17 +5,26 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const UpBar = () => {
+
+const UpBar = ({fullName}) => {
     const [expand, setExpand] = useState(false);
     const location = useLocation(); 
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setExpand(false);
     }, [location]);
+    
 
     const toggleExpand = () => setExpand((prev) => !prev);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    }
 
     return (
         <div className="sticky top-0 left-0 z-10 w-full bg-white shadow-sm">
@@ -37,9 +46,7 @@ const UpBar = () => {
                                     md: 32,
                                     },
                                 }}/>
-                            <span className="text-sm lg:text-lg font-medium text-gray-600 capitalize">
-                            John Kimani
-                        </span>
+                            <span className="text-sm lg:text-lg font-medium text-gray-600 capitalize">{fullName}</span>
                         <button
                             onClick={toggleExpand}
                             className="flex items-center justify-center bg-yellow-500 text-white p-1 md:p-2 rounded-full focus:outline-none"
@@ -67,7 +74,7 @@ const UpBar = () => {
                                     </span>
                                 </div>
                             </Link>
-                            <div className="flex cursor-pointer items-center gap-3">
+                            <div className="flex cursor-pointer items-center gap-3" onClick={handleLogout}>
                                 <LogoutIcon className="text-gray-600" />
                                 <span className="text-sm font-medium text-gray-600 capitalize">
                                     Log Out
