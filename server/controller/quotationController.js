@@ -3,7 +3,8 @@ const {
     addService,
     allService,
     checkService,
-    oneService
+    oneService,
+    editService
 } = require('../services/quotationServices');
 const { remove } = require('../utils/deleteService');
 
@@ -61,9 +62,33 @@ const deleteController = async (req, res) => {
     }
 }
 
+
+const editController = async (req, res) => {
+    try {
+        const { quoteId, description, phone, name } = req.body;
+
+        if (!description && !phone && !name) {
+            return res.status(400).json({ message: 'Please provide a field to update!' });
+        }
+        else {
+            const response = await editService(quoteId, { description, phone, name });
+
+            if (!response) {
+                return res.status(400).json({ message: 'Quotations failed to update!' });
+            }
+
+            return res.status(200).json({ message: 'Quotations updated successfully!' });
+        }
+    } catch (error) {
+        console.error('Error updating Quotations:', error);
+        return res.status(500).json({ message: 'Internal server error', error });
+    }
+};
+
 module.exports = {
     addController,
     allController,
     deleteController,
-    oneController
+    oneController,
+    editController
 }

@@ -11,6 +11,7 @@ import EditItem from './views/pages/editItem';
 import QuotationRecept from './views/pages/quotationRecept';
 import Settings from './views/pages/settings';
 import { jwtDecode } from "jwt-decode";
+import EditQuotation from './views/pages/editQuotation';
 
 function AppContent() {
   const location = useLocation();
@@ -32,7 +33,6 @@ function AppContent() {
         const decodedToken = jwtDecode(token);
         setFullName(`${decodedToken.firstName} ${decodedToken.secondName}`);
       } catch (error) {
-        console.error("Invalid token", error);
         localStorage.removeItem("token");
         navigate('/login');
       }
@@ -79,6 +79,7 @@ function AppContent() {
         <Route path="/editItem/:id" element={<EditItem />} />
         <Route path="/recept/:id" element={<QuotationRecept />} />
         <Route path="/setting" element={<Settings />} />
+        <Route path="/quoteEdit/:id" element={<EditQuotation />} />
       </Routes>
     </>
   );

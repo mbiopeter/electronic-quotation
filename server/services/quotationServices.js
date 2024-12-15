@@ -67,7 +67,7 @@ const oneService = async (id) => {
     try {
         const quotation = await Quotations.findOne({
             where: { id },
-            attributes: ['id', 'name', 'phone', 'createdAt'],
+            attributes: ['id', 'name', 'description', 'phone', 'createdAt'],
         });
 
         if (!quotation) {
@@ -81,6 +81,7 @@ const oneService = async (id) => {
             QuoteNo: `Quote-${quotation.id}`,
             toName: quotation.name,
             toPhone: quotation.phone,
+            description: quotation.description,
             date: formattedDate,
         };
 
@@ -90,10 +91,32 @@ const oneService = async (id) => {
     }
 };
 
+const editService = async (quoteId, fieldsToUpdate) => {
+    try {
+
+        const updateFields = {};
+        for (const [key, value] of Object.entries(fieldsToUpdate)) {
+            if (value !== undefined) {
+                updateFields[key] = value;
+            }
+        }
+
+        if (Object.keys(updateFields).length === 0) {
+            throw new Error('No valid fields provided for update');
+        }
+
+        const response = await Quotations.update(updateFields, { where: { id: quoteId } });
+
+        return response[0] > 0;
+    } catch (error) {
+        throw error;
+    }
+};
 
 module.exports = {
     addService,
     allService,
     checkService,
-    oneService
+    oneService,
+    editService
 }

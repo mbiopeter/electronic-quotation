@@ -37,9 +37,20 @@ const Quotations = () => {
             </button>
         </Link>
     );
+
+    const EditBtn = ({ id }) => (
+        <Link to={`/quoteEdit/${id}`}>
+            <button className="bg-green-600 text-white text-sm font-[500] p-2 rounded">
+                EDIT
+            </button>
+        </Link>
+    );
+
+
     const rows = apiData.map((row) => ({
         ...row,
-        detailaBtn: <DetailsBtn id={row.id} />,
+        editBtn: <EditBtn id={row.id} />,
+        detailBtn: <DetailsBtn id={row.id} />,
         deleteBtn: <TableBtn id={row.id} />,
     }));
 
@@ -48,7 +59,8 @@ const Quotations = () => {
         { id: "desc", label: "Description", align: "left" },
         { id: "toName", label: "To Name", align: "left" },
         { id: "toPhone", label: "To Phone", align: "left" },
-        { id: "detailaBtn", label: "#", align: "left" },
+        { id: "editBtn", label: "#", align: "left" },
+        { id: "detailBtn", label: "#", align: "left" },
         { id: "deleteBtn", label: "#", align: "left" },
     ];
 
