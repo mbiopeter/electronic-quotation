@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { logo } from '../../model/images';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -63,14 +64,37 @@ const UpBar = ({fullName}) => {
                             expand
                                 ? 'opacity-100 translate-y-0 visible'
                                 : 'opacity-0 -translate-y-4 invisible'
-                        }`}
-                    >
+                        }`}>
                         <div className="flex flex-col gap-3">
                             <Link to="/setting">
                                 <div className="flex cursor-pointer items-center gap-3">
                                     <SettingsIcon className="text-gray-600" />
                                     <span className="text-sm font-medium text-gray-600 capitalize">
                                         Settings
+                                    </span>
+                                </div>
+                            </Link>
+                            <Link to="/profile">
+                                <div className="flex cursor-pointer items-center gap-3">
+                                    <AccountCircleIcon className="text-gray-600" />
+                                    <span className="text-sm font-medium text-gray-600 capitalize">
+                                        Profile
+                                    </span>
+                                </div>
+                            </Link>
+                            <Link to="/">
+                                <div className="flex cursor-pointer items-center gap-3">
+                                    <AccountCircleIcon className="text-gray-600" />
+                                    <span className="text-sm font-medium text-gray-600 capitalize">
+                                        Home
+                                    </span>
+                                </div>
+                            </Link>
+                            <Link to="/quotations">
+                                <div className="flex cursor-pointer items-center gap-3">
+                                    <AccountCircleIcon className="text-gray-600" />
+                                    <span className="text-sm font-medium text-gray-600 capitalize">
+                                        Quotations
                                     </span>
                                 </div>
                             </Link>

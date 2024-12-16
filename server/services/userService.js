@@ -45,8 +45,41 @@ const oneUser = async (userId) => {
     }
 };
 
+const editService = async (userId, fieldsToUpdate) => {
+    try {
+        const { prevPassword, password, ...otherFields } = fieldsToUpdate;
+
+        if (!userId || Object.keys(otherFields).length === 0 && !password) {
+            throw new Error('No valid fields provided for update');
+        }
+
+        const user = await User.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        if (password) {
+            if (!prevPassword) {
+                throw new Error('Previous password is required to update the password');
+            }
+
+            const isMatch = await bcrypt.compare(prevPassword, user.password);
+            if (!isMatch) {
+                throw new Error('Previous password is incorrect');
+            }
+
+            otherFields.password = await bcrypt.hash(password, 10);
+        }
+
+        const [updated] = await User.update(otherFields, { where: { id: userId } });
+        return updated > 0;
+    } catch (error) {
+        throw error;
+    }
+};
 
 module.exports = {
     registerUser,
     oneUser,
+    editService
 };

@@ -12,10 +12,15 @@ import QuotationRecept from './views/pages/quotationRecept';
 import Settings from './views/pages/settings';
 import { jwtDecode } from "jwt-decode";
 import EditQuotation from './views/pages/editQuotation';
+import Profile from './views/pages/profile';
+import axios from 'axios';
+import { url } from './consts/urls';
 
 function AppContent() {
   const location = useLocation();
+  const [userId, setUserId] = useState();
   const [fullName, setFullName] = useState('');
+  const [refetchUser, setRefetchUser] = useState(false);
   const navigate = useNavigate();
 
   const showUpBar = !(location.pathname === '/login' || location.pathname.startsWith('/recept'));
@@ -31,7 +36,7 @@ function AppContent() {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        setFullName(`${decodedToken.firstName} ${decodedToken.secondName}`);
+        setUserId(decodedToken.id);
       } catch (error) {
         localStorage.removeItem("token");
         navigate('/login');
@@ -40,6 +45,20 @@ function AppContent() {
       navigate('/login');
     }
   };
+
+  const handleFetchUser = async () => {
+    try {
+      const response = await axios.get(`${url}/user/one`, { params: { id: userId } });
+
+      setFullName(`${response.data.firstName} ${response.data.secondName}`)
+    } catch (error) {
+      return error;
+    }
+  }
+
+  useEffect(() => {
+    handleFetchUser()
+  }, [refetchUser])
 
   const handleTokenExpiery = () => {
     const token = localStorage.getItem("token");
@@ -80,6 +99,7 @@ function AppContent() {
         <Route path="/recept/:id" element={<QuotationRecept />} />
         <Route path="/setting" element={<Settings />} />
         <Route path="/quoteEdit/:id" element={<EditQuotation />} />
+        <Route path="/profile" element={<Profile setRefetchUser={setRefetchUser} refetchUser={refetchUser} />} />
       </Routes>
     </>
   );
